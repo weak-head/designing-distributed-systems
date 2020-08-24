@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: Pod
+
+metadata:
+  name: request-splitting-example
+
+spec:
+  containers:
+
+  # Ambassador container that does request splitting
+  - name: ambassador
+    image: nginx
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    volumeMounts:
+      - name: ambassador-config-volume
+        mountPath: /etc/nginx
+      - name: ambassador-logs
+        mountPath: /var/log/nginx
+
+  # Experiment container that accepts 10% of requests
+  - name: experiment
+    image: nginx
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    volumeMounts:
+      - name: experiment-config-volume
+        mountPath: /etc/nginx
+      - name: experiment-logs
+        mountPath: /var/log/nginx
+
+  # Prod container that accepts 90% of requests
+  - name: prod
+    image: nginx
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    volumeMounts:
+      - name: prod-config-volume
+        mountPath: /etc/nginx
+      - name: prod-logs
+        mountPath: /var/log/nginx
+
+
+  # Define config maps as volumes
+  volumes:
+    - name: ambassador-config-volume
+      configMap:
+          name: ambassador-config
+    
+    - name: experiment-config-volume
+      configMap:
+          name: experiment-config
+
+    - name: prod-config-volume
+      configMap:
+          name: prod-config
+
+    # Logs
+    - name: ambassador-logs
+      emptyDir: {}
+    - name: experiment-logs
+      emptyDir: {}
+    - name: prod-logs
+      emptyDir: {}
+
