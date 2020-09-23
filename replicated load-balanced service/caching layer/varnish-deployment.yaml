@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: varnish-cache
+spec:
+  selector:
+    matchLabels:
+      app: varnish-cache
+  template:
+    metadata:
+      labels:
+        app: varnish-cache
+    spec:
+      containers:
+      - name: varnish-cache
+        image: brendanburns/varnish
+        resources:
+          requests:
+            memory: "128Mi"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
+        command:
+        - varnishd
+        - -F
+        - -f
+        - /etc/varnish-config/varnish.vcl
+        - -a
+        - 0.0.0.0:8080
+        - -s
+        - malloc,2G
+        volumeMounts:
+        - name: varnish-volume
+          mountPath: /etc/varnish-config
+      volumes:
+      - name: varnish-volume
+        configMap:
+              name: varnish-config
