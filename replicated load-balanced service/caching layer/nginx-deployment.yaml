@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-ssl 
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: nginx-ssl 
+  template:
+    metadata:
+      labels:
+        app: nginx-ssl 
+    spec:
+      containers:
+      - name: nginx-ssl 
+        image: nginx
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 443
+        volumeMounts:
+        - name: conf
+          mountPath: /etc/nginx
+        - name: certs
+          mountPath: /etc/certs
+      volumes:
+      - name: conf
+        configMap:
+          name: nginx-config
+      - name: certs
+        secret:
+          secretName: ssl
+              
