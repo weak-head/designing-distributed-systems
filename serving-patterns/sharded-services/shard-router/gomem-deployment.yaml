@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gomem
+  labels:
+    name: gomem
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: gomem
+  template:
+    metadata:
+      labels:
+        app: gomem
+    spec:
+      containers:
+      - name: gomem
+        image: github.com/weak-head/gomem:0.0.1
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        env:
+        - name: MEMCACHE_HOST
+          value: "shared-twemproxy-service"
+        - name: MEMCACHE_PORT
+          value: "11211"
+        ports:
+        - containerPort: 8989
