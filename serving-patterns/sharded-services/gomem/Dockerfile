@@ -9,7 +9,7 @@ RUN GRPC_HEALTH_PROBE_VERSION=v0.3.2 && \
     chmod +x /go/bin/grpc_health_probe
 
 
-# Copy the binaries of our service the new lightweigh container
+# Copy the binaries of our service to the new lightweigh container
 FROM scratch
 COPY --from=build /go/bin/gomem /bin/gomem
 COPY --from=build /go/bin/grpc_health_probe /bin/grpc_health_probe
