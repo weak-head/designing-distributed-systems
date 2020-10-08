@@ -21,3 +21,9 @@ deploy:
 
 	# Deploy ambassador pod with application container
 	kubectl create -f memcache-ambassador-pod.yaml
+
+	# -- Test how it works:
+	#
+	# > kubectl port-forward pod/sharded-memcache-ambassador 8989:8989
+	# > curl localhost:8989/set/key1/val1
+	# > curl localhost:8989/get/key1

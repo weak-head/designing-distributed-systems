@@ -6,10 +6,18 @@ metadata:
     name: sharded-memcache-ambassador
 spec:
   containers:
-  # This is where the application container would go, for example
-  # - name: nginx
-  #   image: nginx
-  # This app container can access twemproxy router via localhost:11211
+  # This is where the application container goes
+  - name: gomem
+    image: github.com/weak-head/gomem:0.0.1
+    env:
+    - name: MEMCACHE_HOST
+      value: "localhost"
+    - name: MEMCACHE_PORT
+      value: "11211"
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
 
   # This is the ambassador container
   - name: twemproxy

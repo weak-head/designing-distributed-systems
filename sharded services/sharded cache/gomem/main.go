@@ -46,8 +46,8 @@ func (s *state) handleSet(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	memHost := os.Getenv("MEMCHACHE_HOST")
-	memPort := os.Getenv("MEMCHACHE_PORT")
+	memHost := os.Getenv("MEMCACHE_HOST")
+	memPort := os.Getenv("MEMCACHE_PORT")
 
 	if memHost == "" {
 		memHost = "localhost"
