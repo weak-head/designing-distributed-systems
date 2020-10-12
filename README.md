@@ -12,3 +12,4 @@ Patterns of a Distributed Systems with k8s examples.
 
 * [replicated load-balanced service](serving-patterns/replicated-load-balanced-service/caching-layer/)
 * [sharded service](serving-patterns/sharded-services/)
+* [function as a service](serving-patterns/faas/)
