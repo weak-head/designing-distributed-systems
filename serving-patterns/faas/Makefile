@@ -39,6 +39,9 @@ clean:
 	# Delete scraper function
 	kubeless function delete scraper
 
+	kubectl delete deployment faas-deployment
+	kubectl delete service faas-service
+
 .PHONY: deploy
 deploy:
 	# Deploy scrapper function
@@ -47,3 +50,9 @@ deploy:
 	# kubectl get functions
 	# kubeless function ls
 	# kubeless function call scraper --data '{"url":"https://webscraper.io/test-sites/e-commerce/allinone"}'
+
+	kubectl apply -f webapp-deployment.yaml
+	kubectl apply -f webapp-service.yaml
+
+	# kubectl port-forward service/faas-service 8888:80
+	# curl http://localhost:8888

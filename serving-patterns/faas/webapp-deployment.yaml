@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: faas-deployment
+  labels:
+    role: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      role: app
+  template:
+    metadata:
+      labels:
+        role: app
+    spec:
+      containers:
+
+      # Backend service
+      - name: app
+        image: github.com/weak-head/faas-app:0.0.1
+        ports:
+        - containerPort: 5000
+        livenessProbe:
+          httpGet:
+            path: /alive
+            port: 5000 
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 5000 
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+
+      # Frontend + nginx
+      - name: web
+        image: github.com/weak-head/faas-web:0.0.1
+        ports:
+        - containerPort: 80
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+            httpHeaders:
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"

@@ -14,6 +14,15 @@ def scrape():
     r = requests.post("http://scraper:8080", json={"url": url})
     return r.text
 
+# Readines probe
+@app.route("/ready", methods=['GET'])
+def ready():
+    return "OK"
+
+# Liveness probe
+@app.route("/alive", methods=['GET'])
+def alive():
+    return "OK"
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
