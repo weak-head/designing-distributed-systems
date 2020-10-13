@@ -1,7 +1,19 @@
 SCRAPER_PACKAGE_FILE = scraper_package.zip
+WEB_IMAGE_ID ?= github.com/weak-head/faas-web
+WEB_IMAGE_TAG ?= 0.0.1
 
-.PHONY: scraper_package
-scraper_package:
+.PHONY: build-docker
+build-docker:
+	# Build Nginx + Frontend image
+	cd web && docker build -t $(WEB_IMAGE_ID):$(WEB_IMAGE_TAG) .
+
+.PHONY: load-image
+load-image: build-docker
+	# Load Nginx + Frontend into kind
+	kind load docker-image $(WEB_IMAGE_ID):$(WEB_IMAGE_TAG)
+
+.PHONY: scraper-package
+scraper-package:
 	# Install scraper dependencies locally
 	cd scraper && pip3 install -t . bs4 requests 
 
